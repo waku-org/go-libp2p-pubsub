@@ -1985,6 +1985,22 @@ func (gs *GossipSubRouter) getPeers(topic string, count int, filter func(peer.ID
 	return peers
 }
 
+func (gs *GossipSubRouter) MeshPeers(topic string) []peer.ID {
+	peers, ok := gs.mesh[topic]
+	if !ok {
+		return nil
+	}
+
+	result := make([]peer.ID, len(peers))
+	i := 0
+	for p := range peers {
+		result[i] = p
+		i++
+	}
+
+	return result
+}
+
 // WithDefaultTagTracer returns the tag tracer of the GossipSubRouter as a PubSub option.
 // This is useful for cases where the GossipSubRouter is instantiated externally, and is
 // injected into the GossipSub constructor as a dependency. This allows the tag tracer to be
