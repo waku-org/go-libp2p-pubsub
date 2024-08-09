@@ -2,7 +2,7 @@ package pubsub
 
 import (
 	"context"
-	"math/rand"
+	"crypto/rand"
 	"strconv"
 	"sync"
 	"testing"
@@ -15,6 +15,7 @@ import (
 
 	pb "github.com/libp2p/go-libp2p-pubsub/pb"
 
+	//lint:ignore SA1019 "github.com/libp2p/go-msgio/protoio" is deprecated
 	"github.com/libp2p/go-msgio/protoio"
 )
 
@@ -25,7 +26,7 @@ func TestGossipsubAttackSpamIWANT(t *testing.T) {
 	defer cancel()
 
 	// Create legitimate and attacker hosts
-	hosts := getNetHosts(t, ctx, 2)
+	hosts := getDefaultHosts(t, 2)
 	legit := hosts[0]
 	attacker := hosts[1]
 
@@ -142,7 +143,7 @@ func TestGossipsubAttackSpamIHAVE(t *testing.T) {
 	defer cancel()
 
 	// Create legitimate and attacker hosts
-	hosts := getNetHosts(t, ctx, 2)
+	hosts := getDefaultHosts(t, 2)
 	legit := hosts[0]
 	attacker := hosts[1]
 
@@ -195,6 +196,7 @@ func TestGossipsubAttackSpamIHAVE(t *testing.T) {
 					Control:       &pb.ControlMessage{Graft: []*pb.ControlGraft{{TopicID: sub.Topicid}}},
 				})
 
+				sub := sub
 				go func() {
 					defer cancel()
 
@@ -292,7 +294,7 @@ func TestGossipsubAttackGRAFTNonExistentTopic(t *testing.T) {
 	defer cancel()
 
 	// Create legitimate and attacker hosts
-	hosts := getNetHosts(t, ctx, 2)
+	hosts := getDefaultHosts(t, 2)
 	legit := hosts[0]
 	attacker := hosts[1]
 
@@ -376,7 +378,7 @@ func TestGossipsubAttackGRAFTDuringBackoff(t *testing.T) {
 	defer cancel()
 
 	// Create legitimate and attacker hosts
-	hosts := getNetHosts(t, ctx, 2)
+	hosts := getDefaultHosts(t, 2)
 	legit := hosts[0]
 	attacker := hosts[1]
 
@@ -430,6 +432,7 @@ func TestGossipsubAttackGRAFTDuringBackoff(t *testing.T) {
 					Control:       &pb.ControlMessage{Graft: graft},
 				})
 
+				sub := sub
 				go func() {
 					defer cancel()
 
@@ -617,7 +620,7 @@ func TestGossipsubAttackInvalidMessageSpam(t *testing.T) {
 	defer cancel()
 
 	// Create legitimate and attacker hosts
-	hosts := getNetHosts(t, ctx, 2)
+	hosts := getDefaultHosts(t, 2)
 	legit := hosts[0]
 	attacker := hosts[1]
 
